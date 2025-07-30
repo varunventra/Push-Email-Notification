@@ -1,0 +1,35 @@
+name : Email Notification on Push
+on :
+  push :
+    branch :
+      - main
+
+jobs :
+  sned-email : 
+  runs on : ubuntu-latest
+  steps : 
+    - name : Checkout Repository
+      uses : actions/checkout@v4
+
+    - name : Send Email
+      uses :  dawidd6/action-send-mail@v6
+      with : 
+        server_address : smtp.gamil.com
+        server_port : 465
+
+        username : ${{ secrets.MAIL_USERNAME }}
+        password : ${{ secrets.MAIL_PASSWORD }}
+
+        subject: '[GitHub Push] New code in ${{ github.repository }}'
+        body: |
+          A new commit was pushed by ${{ github.actor }}.
+
+          Commit message: "${{ github.event.head_commit.message }}"
+
+          View the changes here:
+          ${{ github.event.head_commit.url }}
+        
+        to : varun.v-i@aidenai.com
+
+        from : GitHub Notifier
+        
